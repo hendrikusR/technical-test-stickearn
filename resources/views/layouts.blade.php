@@ -24,7 +24,7 @@
             text-align:right;
         }
 
-        .user-info p, .user-info > a, .user-info > a:hover {
+        .user-info p, .user-info a, .user-info a:hover {
             font-weight:bold;
             color:#8C6AAE;
             font-size:16px;

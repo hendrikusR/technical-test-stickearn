@@ -140,10 +140,18 @@
             play.answer();
         },
         answer: function() {
+
+            $('#myform').on('keyup keypress', function(e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) { 
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+
             $("#myform").submit(function(event){
-
                 event.preventDefault();
-
                 let answer = $('input[name="answer"]').val();
 
                 if(answer != "undefined" && answer != "") {
@@ -152,23 +160,7 @@
                     swal("Answer Cannot Be Empty", "", "error");
                 }
             });
-        },
-        // logout: function() {
-        //     $.ajax({
-        //         type:"POST",
-        //         url: "{{ url('logout') }}" ,
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         success: function(){
-        //             window.location.href = "/";
-        //         },
-        //         error: function(){
-        //             swal("Logout Failed", "", "error");
-        //             window.location.href = "/login";
-        //         }
-        //     })
-        // },
+        }, 
         submitAnswer: function() {
             $.ajax({
                 type:"POST",
