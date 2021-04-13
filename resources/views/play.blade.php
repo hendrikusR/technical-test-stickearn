@@ -93,19 +93,6 @@
             font-size:24px;
         }
 
-        .user-info {
-            display:block;
-            text-align:right;
-        }
-
-        .user-info p, a, a:hover {
-            font-weight:bold;
-            color:#8C6AAE;
-            font-size:16px;
-            text-decoration:none;
-            font-family: 'Poppins', sans-serif;
-        }
-
         .score p {
             color:#8C6AAE;
             font-weight:bold;
@@ -118,47 +105,29 @@
 
 
 @section('content')
-<div class="container padding-top-70">
-    <div class="row">
-        <div class="col-md-12">
-            @if(\Auth::check())
-                <div class="user-info">
-                    <p> 
-                        <i class="glyphicon glyphicon-user"></i> {{ \Auth::user()->name }}
-
-                        <a href="javascript:void(0)" onclick="play.logout()">
-                            <i class="glyphicon glyphicon-log-out"></i> Logout
-                        </a>
-                        
-                    </p>
-                </div>
-            @endif
 
 
-            <div class="score">
-                <p>
-                    {{ $score }}
-                    <i class="glyphicon glyphicon-tree-conifer"></i>
-                </p>
-                
-            </div>
-            
-            <p class="question">Question number {{ $page }}</p>
-            <h1>{{ $question }}</h1>
-            <form id="myform" method="post">
-                <label>
-                    <input type="text" class="input" name="answer">
-                    <input type="hidden" class="input" name="page" value="{{ $page }}">
-                    <input type="hidden" class="input" name="question" value="{{ $question }}">
-                    <div class="line-box">
-                        <div class="line"></div>
-                    </div>
-                </label>
-                <button class="btn btn-ultra-voilet btn-block">Answer !!</button>
-            </form>
-        </div>
-    </div>
+<div class="score">
+    <p>
+        {{ $score }}
+        <i class="glyphicon glyphicon-tree-conifer"></i>
+    </p>
+    
 </div>
+
+<p class="question">Question number {{ $page }}</p>
+<h1>{{ $question }}</h1>
+<form id="myform" method="post">
+    <label>
+        <input type="text" class="input" name="answer">
+        <input type="hidden" class="input" name="page" value="{{ $page }}">
+        <input type="hidden" class="input" name="question" value="{{ $question }}">
+        <div class="line-box">
+            <div class="line"></div>
+        </div>
+    </label>
+    <button class="btn btn-ultra-voilet btn-block">Answer !!</button>
+</form>
 @endsection
 
 
@@ -184,22 +153,22 @@
                 }
             });
         },
-        logout: function() {
-            $.ajax({
-                type:"POST",
-                url: "{{ url('logout') }}" ,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(){
-                    window.location.href = "/";
-                },
-                error: function(){
-                    swal("Logout Failed", "", "error");
-                    window.location.href = "/login";
-                }
-            })
-        },
+        // logout: function() {
+        //     $.ajax({
+        //         type:"POST",
+        //         url: "{{ url('logout') }}" ,
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         success: function(){
+        //             window.location.href = "/";
+        //         },
+        //         error: function(){
+        //             swal("Logout Failed", "", "error");
+        //             window.location.href = "/login";
+        //         }
+        //     })
+        // },
         submitAnswer: function() {
             $.ajax({
                 type:"POST",

@@ -19,4 +19,9 @@ Route::get("/login", ["as" => "login", "uses" => "LoginController@index"]);
 Route::post("/logout", ["as" => "logout", "uses" => "LoginController@logout"]);
 Route::post("/login", ["as" => "login-submit", "uses" => "LoginController@login"]);
 Route::post("/answer", ["as" => "answer", "uses" => "HomeController@answer"]);
-Route::get("/play", ["as" => "play", "uses" => "HomeController@play"])->middleware(["auth","web"]);
+
+
+Route::get("/play", ["as" => "play", "uses" => "HomeController@play"])->middleware('auth');
+Route::get('/dashboard', ["as" => "dashboard", "uses" => "DashboardController@index"])->middleware(['admin','auth']);
+
+

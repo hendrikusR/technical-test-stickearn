@@ -27,15 +27,8 @@
 
 
 @section('content')
-
-<div class="container padding-top-70">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>WORD SCRAMBLER</h1>        
-            <a href="{{ route('play') }}" class="btn btn-warning btn-custom">
-                PLAY !!
-            </a>
-        </div>
-    </div>
-</div>
+    <h1>WORD SCRAMBLER</h1>        
+    <a href="{{ route('play') }}" class="btn btn-warning btn-custom">
+        PLAY !!
+    </a>
 @endsection
