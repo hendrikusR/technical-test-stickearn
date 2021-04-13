@@ -214,7 +214,11 @@
                     if(response.answer == false) {
                         swal("Wrong Answer", "", "error");
                     } else {
-                        swal("Cooollllll", "", "success");
+                        swal({title: "Cooollllll", type: "success"},
+                            function(){ 
+                                location.reload();
+                            }
+                        );
                     }
                 },
                 error: function(){

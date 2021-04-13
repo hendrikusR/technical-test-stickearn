@@ -43,21 +43,35 @@ class HomeController extends Controller
         //get original question from api
         $originalQuestion = strtolower($this->getQuestion($request->page)['name']);
 
+        //get data current score
+        $currentScore = $this->getCurrentScore();
+
 
         //check if answer identity with originalQuestion
         if($answer === $originalQuestion) {
 
             //set page = request page + 1
             $page = $request->page + 1;
-
-
+            
             //check if current score if empty and call addScore function if not empty call updateScore function
-            if(empty($this->getCurrentScore())) {
+            if(empty($currentScore)) {
                 $this->addScore();
+                $this->setHistories([
+                    'score' => "+10",
+                    'question' => strtolower($request->question),
+                    'answer' => $answer,
+                    'status' => 1
+                ]);
             } else {
                 $this->updateScore($page);
+                $this->setHistories([
+                    'score' => "+10",
+                    'question' => strtolower($request->question),
+                    'answer' => $answer,
+                    'status' => 1
+                ]);
             }
-
+            
             return json_encode([
                 'code' => 200,
                 'answer' => true,
@@ -65,9 +79,21 @@ class HomeController extends Controller
             
         } else {
 
-            // deduct score when answer is wrong
-            $this->deductScore($request->page);
+            // deduct score when answer is wrong and checkl is current score is empty or not
+            if(!empty($currentScore)) {
+                $this->deductScore($request->page);
+            } else {
 
+                //set score -10 if answer is wrong on the first question
+                $this->addScore($score = -10);
+            }
+            
+            $this->setHistories([
+                'score' => "-10",
+                'question' => strtolower($request->question),
+                'answer' => $answer,
+                'status' => 0
+            ]);
             return json_encode([
                 'code' => 200,
                 'answer' => false
@@ -110,11 +136,11 @@ class HomeController extends Controller
     /**
      * set addScore function with default value current_page = 2, score 10, user_id session from user login
      */
-    public function addScore()
+    public function addScore($score = 10)
     {
         return DB::table('scores')->insert([
             'user_id' => Auth::user()->id,
-            'score' => 10,
+            'score' => $score,
             'current_page' => 2,
             'created_at' => date('Y-m-d H:i:s')
         ]);
@@ -126,7 +152,7 @@ class HomeController extends Controller
     {
         
         $params = [
-            'score' => $this->getCurrentScore()->score - 10,
+            'score' => !empty($this->getCurrentScore()) ? $this->getCurrentScore()->score - 10 : -10,
             'page' => $page
         ];
         
@@ -157,4 +183,18 @@ class HomeController extends Controller
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
     }
+
+
+    public function setHistories($params)
+    {
+        return DB::table('histories')->insert([
+            'user_id' => Auth::user()->id,
+            'score' => $params['score'],
+            'question' => $params['question'],
+            'answer' => $params['answer'],
+            'status' => $params['status'],
+            'created_at' => date('Y-m-d H:i:s')
+        ]);
+    }
+    
 }
